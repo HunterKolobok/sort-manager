@@ -41,13 +41,28 @@ func main() {
 			"": "other",
 			}
 
-	structFile, _ := os.ReadDir("./test")
+	structFile, _ := os.ReadDir("../test")
 
-	for _, structik := range structFile {
-		if structik.IsDir() == false {
-			nameFile := structik.Name()
-			extFile := m[filepath.Ext(nameFile)]
+	for _, dirEntry := range structFile {
+
+		if dirEntry.IsDir() == false {
+
+			nameFile := dirEntry.Name()
+			extFile, ok := m[filepath.Ext(nameFile)]
+
+			if !ok {
+				extFile = m[""]
+			}
+
 			fmt.Println(nameFile, " -> ", extFile )
+
+			p := filepath.Join("../test", extFile)
+			err := os.MkdirAll(p, 0755)
+			if err != nil{
+				fmt.Println(err)
+			}
+
 		}
 	}
+
 }
